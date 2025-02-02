@@ -1,0 +1,456 @@
+npx create-next-app@15.0.0 my-next-app (setup version-15)
+Если ты уже создал приложение с последней версией, ты можешь откатиться к нужной версии. Сделай это так:
+Открой проект и отредактируй файл package.json:
+{
+  "dependencies": {
+    "next": "15.0.0",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
+  }
+}
+Удали папку node_modules и файл package-lock.json: rm -rf node_modules package-lock.json
+Переустанови зависимости: npm install
+Проверка версии Next.js: npm list next
+asking nameProject: sociial-media-nextjs-15 ,
+TS- Y
+Eslint - Y
+Tailwind Css - Y
+Api Router - Y
+Turbopack - N 
+import alias - N
+
+npm run dev for check localhost -3000
+
+<o ========================================Setting shadcn-ui =================== >
+npx shadcn-ui@latest init
+Если ты хочешь установить конкретную версию, например, 1.2.0, используй:
+npx shadcn-ui@1.2.0 init
+if npx doesnt work u can do it MANUAL: npm install shadcn-ui
+BUT if it MANUAL y NEED ToMAKE IMPORT IT IN COMPONENT BY HAND! <a (import { Button } from 'shadcn-ui';>
+)
+
+<I SEARCHING VERSIONS  ON:> https://www.npmjs.com/package/shadcn-ui?activeTab=versions
+style--default
+color--slate 
+CSS for colors---Y 
+
+
+Пакет @lucia-auth/adapter-prisma@4.0.1 требует @prisma/client версии ^4.2.0 || ^5.0.0.
+Однако, в твоём проекте уже установлена версия @prisma/client@6.2.1, которая вызывает конфликт.
+npm install shadcn-ui --legacy-peer-deps
+Изменение версий зависимостей вручную
+Открой package.json.
+Найди зависимости @lucia-auth/adapter-prisma и @prisma/client.
+Попробуй установить совместимые версии этих пакетов, чтобы они не конфликтовали.
+Например, если @lucia-auth/adapter-prisma требует @prisma/client версии ^4.2.0 || ^5.0.0, попробуй установить подходящую версию:
+npm install @prisma/client@5.0.0
+<a После этого снова попробуй установить shadcn-ui:   npm install @prisma/client@5.0.0
+>
+=====================================================================================================
+
+
+npm i lucia @lucia-auth/adapter-prisma prisma @prisma/client @tanstack/react-query @tanstack/react-query-devtools 
+@tiptap/react @tiptap/starter-kit @tiptap/extension-placeholder @tiptap/pm uploadthing @uploadthing/react arctic 
+date-fns ky next-themes react-cropper react-image-file-resizer react-intersection-observer react-linkify-it stream-chat 
+stream-chat-react --legacy-peer-deps
+
+
+
+===============<a CREATE DB>===================
+Vercel.com--> cr account(son...em)--> storrage --> cr postgres by neon integration
+
+vscode : npx prisma init:
+✔ Your Prisma schema was created at prisma/schema.prisma
+  You can now open it in your favorite editor.
+
+warn You already have a .gitignore file. Don't forget to add `.env` in it to not commit any private information.
+
+Next steps:
+1. Set the DATABASE_URL in the .env file to point to your existing database. If your database has no tables yet, read https://pris.ly/d/getting-started
+2. Set the provider of the datasource block in schema.prisma to match your database: postgresql, mysql, sqlite, sqlserver, mongodb or cockroachdb.
+3. Run prisma db pull to turn your database schema into a Prisma schema.
+4. Run prisma generate to generate the Prisma Client. You can then start querying your database.
+5. Tip: Explore how you can extend the ORM with scalable connection pooling, global caching, and real-time database events. Read: https://pris.ly/cli/beyond-orm
+
+More information in our documentation:
+https://pris.ly/d/getting-started
+
+.env проверить чтобы попал в gitignore
+
+-.env.local: copy Snippet and delete all inside env and put this copy Snippet
+
+-vercel--> prisma--> copy:
+// prisma/schema.prisma
+datasource db {
+  provider  = "postgresql"
+  url  	    = env("DATABASE_URL")
+}
+-schema.prisma: and change only datasource db(puted that we copied instead )
+
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["fullTextSearch"] // for extantion Prisma only
+}
+
+datasource db {
+  provider  = "postgresql"
+  url  	    = env("DATABASE_URL")
+}
+
+-src:  cr lib_F--> cr prisma.ts: this from prisma docs
+import { PrismaClient } from "@prisma/client";
+const prismaClientSingleton = () => {
+  return new PrismaClient();
+};
+declare global {
+  var prismaGlobal: undefined | ReturnType<typeof prismaClientSingleton>;
+}
+const prisma = globalThis.prismaGlobal ?? prismaClientSingleton();
+export default prisma;
+if (process.env.NODE_ENV !== "production") globalThis.prismaGlobal = prisma;
+
+-shema.prisma: cr model User and  model Session
+after ...
+datasource db {
+  provider  = "postgresql"
+  url  	    = env("DATABASE_URL")
+}
+
+model User {
+id           String @id 
+usename      String @unique //every user have unique username
+(its not part of prisma shema(docs) but just added!)
+
+displayName  String
+
+email        String? @unique
+(String is OPTIONAL  cause if u  AUT by Google account - dont need email)
+
+passwordHash String?
+(OPTIONAL the same dont need for google acc)
+
+googleId     String? @unique
+(if user use google need )
+
+avatarUrl    String? //Optional
+bio          String? //Optional
+
+session      Session[]
+
+createdAt DateTime @default(now())
+
+@@map("users") // явное указание имени таблицы для большего конторля
+не prisma  именует а я сам
+}
+
+
+model Session {
+id        String   @id
+userId    String 
+expiresAt DateTime
+User      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+(references: [id] относится к юзеру модели и если  мы удаляем юзера то
+и его сесию потому что-- onDelete: Cascade)
+}
+(conection Session to Model by ONE to MANY Relationships)
+
+-terminal: npx prisma db push
+Синхронизирует схему Prisma (schema.prisma) с базой данных
+– Создает таблицы, колонки и индексы, если их еще нет
+– Добавляет новые поля, если они были добавлены в schema.prisma
+– Не удаляет и не изменяет существующие данные
+После успешного db push, автоматически запускается prisma generate, 
+создавая обновленный CLIENT  для работы с DB
+
+--cr auth.ts:
+import prisma from "@/lib/prisma";
+import { PrismaAdapter } from "@lucia-auth/adapter-prisma";
+import { DatabaseUser, Lucia, Session, User } from "lucia";
+import { getDisplayName } from "next/dist/shared/lib/utils";
+import { cookies } from "next/headers";
+import { cache } from "react";
+
+const adapter = new PrismaAdapter(prisma.session, prisma.user);
+
+export const lucia = new Lucia(adapter, {
+  sessionCookie: {
+    expires: false,
+    attributes: {
+      secure: process.env.NODE_ENV !== "production",
+    },
+  },
+  getUserAttributes(databaseUserAttributes) {
+    return {
+      id: databaseUserAttributes.id,
+      username: databaseUserAttributes.username,
+      displayName: databaseUserAttributes.displayName,
+      avatarUrl: databaseUserAttributes.avatarUrl,
+      googleId: databaseUserAttributes.googleId,
+    };
+  },
+});
+
+declare module "lucia" {
+  interface Register {
+    Lucia: typeof lucia;
+    DatabaseUserAttributes: DatabaseUserAttributes;
+  }
+}
+interface DatabaseUserAttributes {
+  id: string;
+  username: string;
+  displayName: string;
+  avatarUrl: string | null;
+  googleId: string | null;
+}
+export const validateRequest = cache(
+  async (): Promise<
+    { user: User; session: Session } | { user: null; session: null }
+  > => {
+    const sessionId = cookies().get(lucia.sessionCookieName)?.value ?? null;
+
+    if (!sessionId) {
+      return {
+        user: null,
+        session: null,
+      };
+    }
+
+    const result = await lucia.validateSession(sessionId);
+
+    try {
+      if (result.session && result.session.fresh) {
+        const sessionCookie = lucia.createSessionCookie(result.session.id);
+        cookies().set(
+          sessionCookie.name,
+          sessionCookie.value,
+          sessionCookie.attributes,
+        );
+      }
+      if (!result.session) {
+        const sessionCookie = lucia.createBlankSessionCookie();
+        cookies().set(
+          sessionCookie.name,
+          sessionCookie.value,
+          sessionCookie.attributes,
+        );
+      }
+    } catch {}
+
+    return result;
+  },
+);
+
+
+-lib_f: cr <r validation.ts>:
+for validation we use library "zod" for backend and frontend very populyar:
+import { z } from "zod";
+
+const requiredString = z.string().trim().min(1, "Required");
+
+export const signUpSchema = z.object({
+  email: requiredString.email("invalid email address"),
+  username: requiredString.regex(
+    /^[a-zA-Z0-9_-]$/,
+    "Only letters, numbers, - and _ allowed",
+  ),
+  password: requiredString.min(8, "Must be at least 8 characters"),
+});
+
+export type SignUpValues = z.infer<typeof signUpSchema>;
+
+export const loginSchema = z.object({
+  email: requiredString,
+  pasword: requiredString,
+});
+export type LoginSchema = z.infer<typeof loginSchema>;
+
+
+-next.config: put the "serverExternalPackages: ["@node-rs/argon2"],"
+form schema-docs
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  experimental: {
+    staleTimes: {
+      dynamic: 30,
+    },
+  },
+  serverExternalPackages: ["@node-rs/argon2"],  //added this one from schema-docs
+};
+
+export default nextConfig;
+
+- app_f: cr (auth)_F --> inside cr signup_F ---> cr actions.ts:
+(too  mutch is stupid but its just from DOCA lucia and other)
+
+"use server";
+
+import { lucia } from "@/auth";
+import prisma from "@/lib/prisma";
+import { signUpSchema, SignUpValues } from "@/lib/validation";
+import { hash } from "@node-rs/argon2";
+import { generateIdFromEntropySize } from "lucia";
+import { isRedirectError } from "next/dist/client/components/redirect";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
+export async function signUp(
+  credentials: SignUpValues,
+): Promise<{ error: string }> {
+  try {
+    const { username, email, password } = signUpSchema.parse(credentials);
+    const passwordHash = await hash(password, {
+      memoryCost: 19456, //just from docs
+      timeCost: 2,
+      outputLen: 32,
+      paralelism: 1,
+    });
+
+    const userId = generateIdFromEntropySize(10);
+
+    const existingUsername = await prisma.user.findFirst({
+      where: {
+        username: {
+          equals: username,
+          mode: "insensitive",
+        },
+      },
+    });
+    if (existingUsername) {
+      return {
+        error: "Username already taken",
+      };
+    }
+
+    const existingEmail = await prisma.user.findFirst({
+      where: {
+        email: {
+          equals: email,
+        },
+      },
+    });
+    if (existingEmail) {
+      return {
+        error: "Email already taken",
+      };
+    }
+    await prisma.user.create({
+      data: {
+        id: userId,
+        username,
+        displayName: username,
+        email,
+        passwordHash,
+      },
+    });
+
+    const session = await lucia.createSession(userId, {});
+    const sessionCookie = lucia.createSessionCookie(session.id);
+    cookies().set(
+      sessionCookie.name,
+      sessionCookie.value,
+      sessionCookie.attributes,
+    );
+
+    return redirect("/");
+  } catch (error) {
+    if (isRedirectError(error)) throw error;
+    console.log(error);
+    return {
+      error: "Something went wrong, please try again.",
+    };
+  }
+}
+
+-<l login_F: <r cr actions.ts>:
+"use server";
+
+import prisma from "@/lib/prisma";
+import { loginSchema, LoginValues } from "@/lib/validation";
+import { isRedirectError } from "next/dist/client/components/redirect";
+import { verify } from "@node-rs/argon2";
+import { lucia } from "@/auth";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
+export async function login(
+  credentials: LoginValues,
+): Promise<{ error: string }> {
+  try {
+    const { username, password } = loginSchema.parse(credentials);
+
+    const existingUser = await prisma.user.findFirst({
+      where: {
+        username: {
+          equals: username,
+          mode: "insensitive",
+        },
+      },
+    });
+    if (!existingUser || !existingUser.passwordHash) {
+      return {
+        error: "Incorect username or password",
+      };
+    }
+
+    const validPassword = await verify(existingUser.passwordHash, password, {
+      memoryCost: 19456, //just from docs
+      timeCost: 2,
+      outputLen: 32,
+      paralelism: 1,
+    });
+
+    if (!validPassword) {
+      return {
+        error: "Incorect username or password",
+      };
+    }
+
+    const session = await lucia.createSession(existingUser.id, {});
+    const sessionCookie = lucia.createSessionCookie(session.id);
+    (await cookies()).set(
+      sessionCookie.name,
+      sessionCookie.value,
+      sessionCookie.attributes,
+    );
+
+    return redirect("/");
+  } catch (error) {
+    if (isRedirectError(error)) throw error;
+    console.log(error);
+    return {
+      error: "Something went wrong. Please try again.",
+    };
+  }
+}
+
+
+-<q auth_F: cr actions.ts>:
+
+"use server";
+import { lucia, validateRequest } from "@/auth";
+import { cookies } from "next/headers";
+import { RedirectType } from "next/navigation";
+import { redirect } from "next/navigation";
+export async function logout() {
+  const { session } = await validateRequest();
+
+  if (!session) {
+    throw new Error("Unathtorized");
+  }
+
+  await lucia.invalidateSession(session.id);
+
+  const sessionCookie = lucia.createBlankSessionCookie();
+
+  cookies().set(
+    sessionCookie.name,
+    sessionCookie.value,
+    sessionCookie.attributes,
+  );
+
+  return redirect("/login");
+}
+
+
+-<i signup_F: cr page.ts(SIGNUP)>:
+
+
