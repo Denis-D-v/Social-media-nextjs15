@@ -1,4 +1,4 @@
-npx create-next-app@15.0.0 my-next-app (setup version-15)
+npx create-next-app@15.0.0 my-next-app (setup version-15) (0.23)
 Если ты уже создал приложение с последней версией, ты можешь откатиться к нужной версии. Сделай это так:
 Открой проект и отредактируй файл package.json:
 {
@@ -47,7 +47,9 @@ npm install @prisma/client@5.0.0
 <a После этого снова попробуй установить shadcn-ui:   npm install @prisma/client@5.0.0
 >
 =====================================================================================================
-
+terminal автоудаление  prisma@6.3.0 и обновление на prisma@5.16.1
+npm install prisma@5.16.1 --save-dev
+npm list prisma   проверка версии
 
 npm i lucia @lucia-auth/adapter-prisma prisma @prisma/client @tanstack/react-query @tanstack/react-query-devtools 
 @tiptap/react @tiptap/starter-kit @tiptap/extension-placeholder @tiptap/pm uploadthing @uploadthing/react arctic 
@@ -450,7 +452,131 @@ export async function logout() {
   return redirect("/login");
 }
 
+======================================<a SIGN UP PAGE>================================
+-<i signup_F: cr page.tsx(SIGNUP)> (app>auth>signup) cr page.tsx:
+1-step
+import { Metadata } from "next"; //if put cursor on web tab(вкладка) - see Sign UP | sandbox
 
--<i signup_F: cr page.ts(SIGNUP)>:
+export const metadata: Metadata = {
+  title: "Sign Up",
+};
+export default function Page() {
+  return <main>Sign Up Page</main>;
+}
+
+2-step
+return 
+    <main className="flex h-screen items-center justify-center p-5">
+      <div className= className="flex h-full max-h-[40rem] w-full max-w-[64rem] 
+       overflow-hidden rounded-2xl bg-card shadow-2xl">
+        <div >
+        login form</div>
+        <Image 
+        src={signupImage} 
+        alt=""/>
+      </div>
+    </main>
+
+3-step
+ <main className="flex h-screen items-center justify-center p-5">
+      <div className=" className="flex h-full max-h-[40rem] w-full max-w-[64rem] 
+       overflow-hidden rounded-2xl bg-card shadow-2xl">
+        <div className="w-1/2 ">login form</div>
+        <Image src={signupImage} alt="" className="w-1/2" />
+      </div>
+    </main>
+
+3.1-step
+<main className="...">...
+     login form
+        </div>
+        <Image src={signupImage} alt="" 
+        className="w-1/2 hidden md:block" />
+      </div>
+    </main>
+(on small screen - img hidden)
+
+5-steps 
+ <div className="md:w-1/2 w-full space-y-10 overflow-y-auto p-10">
+          login form
+        </div>
+        <Image
+          src={signupImage}
+          alt=""
+          className=" hidden w-1/2 object-cover  md:block"
+        />
+      </div>
+  
+  5.1-step add h1
+  <div className="md:w-1/2 w-full space-y-10 overflow-y-auto p-10">
+          login form
+        </div>
+        <div className="space-y-1 text-center">
+          <h1 className="text-3xl font-bold">Sign up to sandbox</h1>
+        </div>
+        <Image
+          src={signupImage}
+          alt=""
+          className=" hidden w-1/2 object-cover  md:block"
+        />
+      </div>
+  
+  7-step add <p> and span
+  TRICKS: in vscode search at top write: > --> wrap whith Abservation -->
+  enter--> span (<span clN="italic">you </span>):
+   <h1 className="text-3xl font-bold">Sign up to sandbox</h1>
+          <p className="text-muted-foreground">
+            A plasce where <span className="italic">you </span>
+            can find friends.
+          </p>
+7.1-step add Link
+ </p>
+          </div>
+          <div className="space-y-5">
+            sign up form
+            <Link href="/login" className="block text-center hover:underline">
+              Already have an account? Log in
+            </Link>
+          </div>
+        </div>
+        <Image>
 
 
+-signUp_F: need to create client-component:
+SignUpForm.tsx:
+"use client";
+export default function signUpForm() {
+  return <>sign up form</>;
+}
+
+-signUp_F-> page.tsx: add signUpForm
+import SignUpForm from "./SignUpForm";
+ return 
+    <main className="flex h-screen items-center justify-center p-5">
+      <div
+        className="flex h-full max-h-[40rem] w-full max-w-[64rem] 
+       overflow-hidden rounded-2xl bg-card shadow-2xl"
+      >
+        <div className="md:w-1/2 w-full space-y-10 overflow-y-auto p-10">
+          <div className="space-y-1 text-center">
+            <h1 className="text-3xl font-bold">Sign up to sandbox</h1>
+            <p className="text-muted-foreground">
+              A plasce where <span className="italic">you </span>
+              can find friends.
+            </p>
+          </div>
+          <div className="space-y-5">
+            <SignUpForm />
+            <Link href="/login" className="block text-center hover:underline">
+              Already have an account? Log in
+            </Link>
+          </div>
+        </div>
+        <Image
+          src={signupImage}
+          alt=""
+          className=" hidden w-1/2 object-cover  md:block"
+        />
+      </div>
+    </main>
+  

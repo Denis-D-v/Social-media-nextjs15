@@ -17,7 +17,7 @@ export async function signUp(
       memoryCost: 19456, //just from docs
       timeCost: 2,
       outputLen: 32,
-      paralelism: 1,
+      parallelism: 1,
     });
 
     const userId = generateIdFromEntropySize(10);
