@@ -17,7 +17,7 @@ export default function Page() {
           <div className="space-y-1 text-center">
             <h1 className="text-3xl font-bold">Sign up to sandbox</h1>
             <p className="text-muted-foreground">
-              A plasce where <span className="italic">you </span>
+              A place where <span className="italic">you </span>
               can find friends.
             </p>
           </div>

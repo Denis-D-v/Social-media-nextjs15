@@ -80,3 +80,10 @@
     border-color: hsl(var(--border));
   }
 }
+/* Новые стили для placeholder и меток */
+@layer utilities {
+  /* Стиль для метки (FormLabel) при фокусировке на инпуте */
+  .FormItem .peer:focus + .peer-focus\:text-red-500 {
+    color: red; /* Красный цвет для метки */
+  }
+}
