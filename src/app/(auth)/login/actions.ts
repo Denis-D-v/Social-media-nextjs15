@@ -1,12 +1,13 @@
 "use server";
 
+import { lucia } from "@/auth";
 import prisma from "@/lib/prisma";
 import { loginSchema, LoginValues } from "@/lib/validation";
-import { isRedirectError } from "next/dist/client/components/redirect";
 import { verify } from "@node-rs/argon2";
-import { lucia } from "@/auth";
+import { isRedirectError } from "next/dist/client/components/redirect";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+
 export async function login(
   credentials: LoginValues,
 ): Promise<{ error: string }> {
@@ -21,28 +22,29 @@ export async function login(
         },
       },
     });
+
     if (!existingUser || !existingUser.passwordHash) {
       return {
-        error: "Incorect username or password",
+        error: "Incorrect username or password",
       };
     }
 
     const validPassword = await verify(existingUser.passwordHash, password, {
-      memoryCost: 19456, //just from docs
+      memoryCost: 19456,
       timeCost: 2,
       outputLen: 32,
-      paralelism: 1,
+      parallelism: 1,
     });
 
     if (!validPassword) {
       return {
-        error: "Incorect username or password",
+        error: "Incorrect username or password",
       };
     }
 
     const session = await lucia.createSession(existingUser.id, {});
     const sessionCookie = lucia.createSessionCookie(session.id);
-    (await cookies()).set(
+    cookies().set(
       sessionCookie.name,
       sessionCookie.value,
       sessionCookie.attributes,
@@ -51,7 +53,7 @@ export async function login(
     return redirect("/");
   } catch (error) {
     if (isRedirectError(error)) throw error;
-    console.log(error);
+    console.error(error);
     return {
       error: "Something went wrong. Please try again.",
     };
