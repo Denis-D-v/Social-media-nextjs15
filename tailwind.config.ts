@@ -13,7 +13,10 @@ const config: Config = {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        "muted-foreground": "hsl(var(--muted-foreground))",
         primary: "hsl(var(--primary))", // Добавлено
+        card: "hsl(var(--card))", // Добавлено
+        secondary: "hsl(var(--secondary))", // Добавлено
         input: "hsl(var(--input))", // Добавлено
         ring: "hsl(var(--ring))", // Добавлено
         red: {

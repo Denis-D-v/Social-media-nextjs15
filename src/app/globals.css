@@ -87,3 +87,18 @@
     color: red; /* Красный цвет для метки */
   }
 }
+@layer utilities {
+  .bg-card {
+    background-color: hsl(var(--card));
+  }
+}
+@layer utilities {
+  .z-dropdown {
+    z-index: 9999 !important;
+  }
+}
+@layer utilities {
+  .text-muted-foreground {
+    color: hsl(var(--muted-foreground));
+  }
+}
